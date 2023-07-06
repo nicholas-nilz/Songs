@@ -72,6 +72,7 @@
         android:textStyle="bold" />
 
     <RadioGroup
+        android:id="@+id/Star"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
@@ -132,4 +133,9 @@
             android:text="@string/show" />
 
     </LinearLayout>
+
+    <ListView
+        android:id="@+id/lv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 </LinearLayout>
