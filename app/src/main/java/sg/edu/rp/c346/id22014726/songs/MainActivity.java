@@ -3,6 +3,7 @@ package sg.edu.rp.c346.id22014726.songs;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.icu.text.CaseMap;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -24,7 +25,8 @@ public class MainActivity extends AppCompatActivity {
     Button insert;
     Button show;
     ListView lv;
-    ArrayList<String> songs;
+    ArrayList<Songs> al;
+    ArrayAdapter<Songs> aa;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,26 +39,39 @@ public class MainActivity extends AppCompatActivity {
         ratings = findViewById(R.id.Star);
         insert = findViewById(R.id.btnInsert);
         show = findViewById(R.id.btnShow);
+        lv = findViewById(R.id.lv);
+
+        al = new ArrayList<Songs>();
+        aa = new ArrayAdapter<Songs>(this,android.R.layout.simple_list_item_1, al);
+
 
     insert.setOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             DBHelper db = new DBHelper(MainActivity.this);
-            int ratingID = ratings.getCheckedRadioButtonId();
-            String star = "";
-            if(ratingID == R.id.rb1){
-                star = "1";
-            }else if(ratingID == R.id.rb2{
-                star = "2";
-            }else if(ratingID == R.id.rb3{
-                star = "3";
-            }else if(ratingID == R.id.rb4){
-                star = "4";
+
+            String songTitle = String.valueOf(title.getText());
+            String songSingers = String.valueOf(singers.getText());
+            int songYear = Integer.valueOf(String.valueOf(year.getText()));
+            int stars = 0;
+
+            String rating = "";
+            int selectedRatingID = ratings.getCheckedRadioButtonId();
+            if(selectedRatingID == R.id.rb1){
+                rating = "1";
+            }else if(selectedRatingID == R.id.rb2){
+                rating = "2";
+            }else if(selectedRatingID == R.id.rb3){
+                rating = "3";
+            }else if(selectedRatingID == R.id.rb4){
+                rating = "4";
             }else{
-                star = "5";
+                rating = "5";
             }
-            db.insertSong(title.getText().toString(), singers.getText().toString(), Integer.parseInt(year.getText().toString()), stars);
+            db.insertSong(songTitle, songSingers, songYear, stars);
             Toast toast = Toast.makeText(insert.getContext(), "Song added successfully", Toast.LENGTH_LONG);
+            toast.show();
+
             db.close();
         }
     });
@@ -74,16 +89,19 @@ public class MainActivity extends AppCompatActivity {
                     String txt = "";
                     songs = new ArrayList<>();
                     for (int i = 0; i < Title.size(); i++) {
-                        Log.d("Database Content", i +"\nSong Title: " + Title.get(i) + "\nSingers: " + dSingers.get(i) + "\nYear of Release: " + dyear.get(i)
-                                + "\nStars: " + ratings.get(i));
-                        txt = "\nSong Title: " + Title.get(i) + "\nSingers: " + Singers.get(i) + "\nYear of Release: " + dyear.get(i)
-                                + "\nStars: " + ratings.get(i);
+                        Log.d("Database Content", i +"\nSong Title: " + Title.get(i) + "\nSingers: " + Singers.get(i) + "\nYear of Release: " + Year.get(i)
+                                + "\nStars: " + ratings);
+                        txt = "\nSong Title: " + Title.get(i) + "\nSingers: " + Singers.get(i) + "\nYear of Release: " + Year.get(i)
+                                + "\nStars: " + ratings;
                         songs.add(i,txt + "\n");
                     }
 
 
                     ArrayAdapter adapter = new ArrayAdapter<>(MainActivity.this, android.R.layout.simple_list_item_1, songs);
                     lv.setAdapter(adapter);
+
+                    Intent i = new Intent(MainActivity.this, displaySong.class);
+                    startActivity(i);
 
                 }
             });

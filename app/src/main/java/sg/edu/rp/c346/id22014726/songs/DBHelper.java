@@ -31,7 +31,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 + COLUMN_TITLE + " TEXT,"
                 + COLUMN_SINGER + " TEXT,"
                 + COLUMN_YEAR + " INTEGER,"
-                + COLUMN_STARS + " TEXT)";
+                + COLUMN_STARS + " INTEGER )";
         db.execSQL(createTableSql);
         Log.i("info", "created tables");
     }
@@ -42,7 +42,7 @@ public class DBHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public void insertSong(String title, String singers, Integer year, String stars) {
+    public void insertSong(String title, String singers, int year, int stars) {
         //Get an instance of the database for writing
         SQLiteDatabase db = this.getWritableDatabase();
         // We use ContentValues object to store the values for the db operation
@@ -58,7 +58,7 @@ public class DBHelper extends SQLiteOpenHelper {
         db.close();
     }
 
-    public ArrayList<Songs> getSongTitle() {
+    public ArrayList<String> getSongTitle() {
         ArrayList<String> Songs = new ArrayList<String>();
         SQLiteDatabase db = this.getReadableDatabase();
         String[] columns = {COLUMN_ID, COLUMN_TITLE, COLUMN_SINGER, COLUMN_YEAR, COLUMN_STARS};
@@ -70,10 +70,10 @@ public class DBHelper extends SQLiteOpenHelper {
         }
         cursor.close();
         db.close();
-        return songs;
+        return Songs;
     }
 
-    public ArrayList<Songs> getSongYear() {
+    public ArrayList<String> getSongSingers() {
         ArrayList<String> Songs = new ArrayList<String>();
         SQLiteDatabase db = this.getReadableDatabase();
         String[] columns = {COLUMN_ID, COLUMN_TITLE, COLUMN_SINGER, COLUMN_YEAR, COLUMN_STARS};
@@ -85,10 +85,10 @@ public class DBHelper extends SQLiteOpenHelper {
         }
         cursor.close();
         db.close();
-        return songs;
+        return Songs;
     }
 
-    public ArrayList<Songs> getSongYear() {
+    public ArrayList<String> getSongYear() {
         ArrayList<String> Songs = new ArrayList<String>();
         SQLiteDatabase db = this.getReadableDatabase();
         String[] columns = {COLUMN_ID, COLUMN_TITLE, COLUMN_SINGER, COLUMN_YEAR, COLUMN_STARS};
@@ -100,10 +100,10 @@ public class DBHelper extends SQLiteOpenHelper {
         }
         cursor.close();
         db.close();
-        return songs;
+        return Songs;
     }
 
-    public ArrayList<Songs> getSongStars() {
+    public ArrayList<String> getSongStars() {
         ArrayList<String> Songs = new ArrayList<String>();
         SQLiteDatabase db = this.getReadableDatabase();
         String[] columns = {COLUMN_ID, COLUMN_TITLE, COLUMN_SINGER, COLUMN_YEAR, COLUMN_STARS};
@@ -115,7 +115,7 @@ public class DBHelper extends SQLiteOpenHelper {
         }
         cursor.close();
         db.close();
-        return songs;
+        return Songs;
     }
 
     public ArrayList<Songs> getSongContent() {
@@ -129,7 +129,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 String title = cursor.getString(1);
                 String singers = cursor.getString(2);
                 int year = cursor.getInt(3);
-                String stars = cursor.getString(4);
+                int stars = cursor.getInt(4);
                 Songs obj = new Songs(id, title, singers, year, stars);
                 songs.add(obj);
             } while (cursor.moveToNext());
